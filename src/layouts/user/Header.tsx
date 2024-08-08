@@ -10,11 +10,15 @@ import SearchInput from "../../components/admin/search-input/SearchInput";
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import NavBar from "../common/NavBar";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store/Store";
+
 
 
 
 const Header = () => {
     const location = useLocation();
+    const listCart = useSelector((state: RootState)=> state.cart.items);
     const isMobile: boolean = useMediaQuery('(max-width:600px)');
     const isMedium: boolean = useMediaQuery('(max-width:1150px)');
     const [openChildItem, setOpenChildItem] = useState<{ [key: string]: boolean }>({});
@@ -90,7 +94,7 @@ const Header = () => {
             }}>
                 <Tooltip title="giỏ hàng">
                     <IconButtonGradient onClick={() => navigate('/cart')}>
-                        <Badge badgeContent={4} color="primary">
+                        <Badge badgeContent={listCart.length} color="primary">
                             <ShoppingCartIcon fontSize="small" />
                         </Badge>
                     </IconButtonGradient>

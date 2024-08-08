@@ -2,6 +2,10 @@ import { Box, Button, TextField } from "@mui/material";
 import { CartItemModel } from "../../../model/cart-item.model";
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
+import { useEffect } from "react";
+import { updateItemCart } from "../../../utils/cart-handle";
+import { updateCartState } from "../../../redux/reducers/cart-reducer";
+import { useDispatch } from "react-redux";
 
 
 
@@ -12,7 +16,7 @@ type Props = {
     cartItem?: CartItemModel
 }
 const QuantityProduct = ({ quantity, setQuantity, maxValue, cartItem }: Props) => {
-
+    const distpatch = useDispatch();
     const increasement = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.stopPropagation();
         if (maxValue > quantity) {
@@ -26,6 +30,13 @@ const QuantityProduct = ({ quantity, setQuantity, maxValue, cartItem }: Props) =
         }
 
     }
+    useEffect(() => {
+        if (cartItem) {
+            let newCartItem: CartItemModel = { ...cartItem, quantity: quantity };
+            updateItemCart(newCartItem);
+            distpatch(updateCartState());
+        }
+    }, [quantity])
     return (
         <Box>
             <Button onClick={(e) => decreasement(e)}>

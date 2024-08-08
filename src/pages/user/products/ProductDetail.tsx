@@ -1,6 +1,6 @@
-import { Box, Button, Container, Rating, Typography } from "@mui/material";
+import { Box, Button, Container, Rating, Typography, useMediaQuery } from "@mui/material";
 import { ProductImageModel } from "../../../model/product-image.model";
-import Carousel from "react-material-ui-carousel";
+
 import { useEffect, useState } from "react";
 import { ProductModel } from "../../../model/product.model";
 import { convertPrice } from "../../../utils/convert-price";
@@ -13,6 +13,10 @@ import { ResponseSuccess } from "../../../dto/responses/response.success";
 import { ProductResponse } from "../../../dto/responses/product-response";
 import { ProductDetailModel } from "../../../model/product-detail.model";
 import { useParams } from "react-router-dom";
+import { addCartLoacalStorage } from "../../../utils/cart-handle";
+import { useDispatch } from "react-redux";
+import { updateCartState } from "../../../redux/reducers/cart-reducer";
+import ListImage from "../list-image/ListImage";
 
 
 type SizeColorProps = {
@@ -51,6 +55,8 @@ const SizeColorBox = ({ text, changeActive, index, activeIndex }: SizeColorProps
 
 const ProductDetail = () => {
     const { id } = useParams();
+    const dispatch = useDispatch();
+    const isMobile: boolean = useMediaQuery('(max-width:600px)');
     const [productImages, setProductImages] = useState<ProductImageModel[]>([]);
     const [productDetails, setProductDetails] = useState<ProductDetailModel[]>([]);
     const [product, setProduct] = useState<ProductModel>();
@@ -127,51 +133,32 @@ const ProductDetail = () => {
 
     }
 
+    const addCart = () => {
+        const productDetail = getProductDetailByColorAndSize();
+        if (productDetail) {
+            addCartLoacalStorage({
+                productDetail: productDetail,
+                quantity: buyQuantity,
+            });
+            dispatch(updateCartState());
+            alert('Thêm vào giỏ hàng thành công');
+        }
+    }
 
     return (
         <Container sx={{
             display: 'flex',
             justifyContent: 'center',
-            mt: 5
+            flexDirection: 'column',
+  
         }}>
             <Box sx={{
                 display: 'flex',
                 gap: '50px',
-                flex: 1
+                flexWrap: 'wrap'
             }}>
-                <Box>
-                    <Carousel sx={{
-                        width: 400,
-                        height: 400,
-                        display: 'flex',
-                        justifyContent: 'flex-start',
-                        alignItems: 'center',
-                        flexDirection: 'column',
-                        overflow: 'hidden',
-                        margin: 'auto',
-                        padding: '10px',
-                        borderRadius: '10px',
-                        boxShadow: '0 0 10px 0 rgba(0, 0, 0, 0.2)',
-                        background: '#fff',
-                        boxSizing: 'border-box',
-                        border: '1px solid rgba(0, 0, 0, 0.125)',
-                        transition: 'transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out',
-                    }}>
-                        {
-                            productImages.map((productImage: ProductImageModel) => {
-                                return (
-                                    <Box key={productImage.id} sx={{ width: '100%', height: '100%' }}>
-                                        <img
-                                            width={'100%'}
-                                            height={'100%'}
-                                            src={productImage.path} alt={productImage.id?.toString()} />
-                                    </Box>
-                                )
-                            })
-                        }
-                    </Carousel>
-                </Box>
-                <Box>
+                <ListImage images={productImages} />
+                <Box sx={{width:'45%', flexGrow:1}}>
                     <Typography variant="h5">
                         {product?.productName}
                     </Typography>
@@ -192,7 +179,6 @@ const ProductDetail = () => {
                                 Màu sắc:
                             </Typography>
                             {colors.map((color: ColorModel, index: number) => {
-                                console.log(index)
                                 return (
                                     <SizeColorBox key={color.id} text={color.name ?? ''} changeActive={changeActiveColor}
                                         index={index} activeIndex={activeColor} />
@@ -220,7 +206,7 @@ const ProductDetail = () => {
                             <QuantityProduct quantity={buyQuantity} setQuantity={setBuyQuantityProp} maxValue={quantityInStock} />
                         </Box>
                         <Box>
-                            <Button variant="contained" color="primary" >
+                            <Button variant="contained" color="primary" onClick={addCart} >
                                 Thêm vào giỏ hàng
                             </Button>
                             <Button variant="contained" color="secondary">
@@ -230,7 +216,22 @@ const ProductDetail = () => {
                     </Box>
                 </Box>
             </Box>
+            <Typography variant="h6">Mô tả sản phẩm</Typography>
+            <Box>
+                <Box>
 
+                </Box>
+                <Box>
+                    <Box>
+
+                    </Box>
+                    <Box></Box>
+                </Box>
+            </Box>
+            <Typography sx={{ mt: 2 }} variant="h6">Đánh giá</Typography>
+            <Box></Box>
+            <Typography sx={{ mt: 2 }} variant="h6">Các sản phẩm tương tự</Typography>
+            <Box></Box>
         </Container>
     )
 }
