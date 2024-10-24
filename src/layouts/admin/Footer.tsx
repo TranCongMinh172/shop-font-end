@@ -1,10 +1,16 @@
-import {Box, Button} from "@mui/material";
+import {Box, Button, Typography} from "@mui/material";
+import { GradientBox } from "../../gradient/GradientColor";
 
-const Footer =()=>{
-    return <Box sx={{backgroundColor:"background.paper"}}>
-        <Box >
-            <Button variant="contained" color="primary">Footer</Button>
-        </Box>
-    </Box>
+const Footer = () => {
+    return <GradientBox sx={{
+        height: '100%', 
+        width: '100%', 
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    }}>
+        <Typography sx={{color: 'white'}}>© 2024 Your Company. All rights reserved.</Typography>
+    </GradientBox>;
 }
+
 export default Footer;

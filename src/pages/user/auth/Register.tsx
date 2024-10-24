@@ -6,8 +6,6 @@ import { grey } from '@mui/material/colors';
 import { useNavigate } from 'react-router-dom';
 import { RegisterRequestDto } from '../../../dto/requests/register-request.dto';
 import React, { useState } from 'react';
-import { ResponseSuccess } from '../../../dto/responses/response.success';
-import { LoginResponse } from '../../../dto/responses/login-response';
 import { register } from '../../../services/auth.service';
 
 // Validation schema using Yup
@@ -24,9 +22,9 @@ const Signup = () => {
     const handleClose = () => {
         setOpen(false);
       };
-      const handleOpen = () => {
-        setOpen(true);
-      };
+    //   const handleOpen = () => {
+    //     setOpen(true);
+    //   };
     const navigate = useNavigate();
 
     const handleLogin = () => {

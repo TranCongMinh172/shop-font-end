@@ -1,14 +1,14 @@
-import { Box, Button, Card, CardActions, CardContent, CardMedia, Typography, useMediaQuery } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import { ProductModel } from "../../../model/product.model";
-
+import { Box, Card, CardContent, CardMedia, Rating, Typography, useMediaQuery } from "@mui/material";
+import { convertPrice } from "../../../utils/convert-price";
+import { red } from "@mui/material/colors";
+import { ProductUserResponse } from "../../../dto/responses/product-user-response";
 
 type Props = {
-    product: ProductModel
+    product: ProductUserResponse
 }
+
 const ProductCard = ({ product }: Props) => {
     const isMobile: boolean = useMediaQuery('(max-width:600px)');
-    const navigate = useNavigate();
     return (
         <Card sx={{
             width: '100%', position: 'relative', cursor: 'pointer',
@@ -17,8 +17,8 @@ const ProductCard = ({ product }: Props) => {
                 transform: 'scale(1.05)',
                 boxShadow: '0 10px 20px rgba(0, 0, 0, 0.2)',
             }
-        }} onClick={() => navigate('/products/' + product.id)}>
-            <Box sx={{
+        }} onClick={() => window.location.href = '/products/' + product.product.id}>
+            {product.discount && <Box sx={{
                 position: 'absolute',
                 top: 0,
                 right: 0,
@@ -29,50 +29,63 @@ const ProductCard = ({ product }: Props) => {
                 <Typography sx={{
                     color: '#fff',
                     fontSize: isMobile ? '8px' : '18px'
-                }}>Sale off 40%</Typography>
-            </Box>
+                }}>Giảm giá {product.discount * 100}%</Typography>
+            </Box>}
             <CardMedia
                 component="img"
                 height={isMobile ? "160" : "250"}
                 width={'100%'}
-                image={product?.thumbnail ?? ''}
-                alt={product?.productName ?? ''}
+                image={product?.product.thumbnail ?? ''}
+                alt={product?.product.productName ?? ''}
             />
             <CardContent sx={{ mb: 0, pb: 0 }}>
                 <Typography gutterBottom sx={{
-                    fontSize: isMobile ? '12px' : '18px'
+                    fontSize: isMobile ? '10px' : '14px',
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis'
                 }}>
-                    {product?.productName ?? ''}
+                    {product?.product.productName ?? ''}
                 </Typography>
                 <Box sx={{
                     display: 'flex',
                     gap: '20px',
                     alignItems: 'center'
                 }}>
-                    <Typography color="text.secondary" sx={{
-                        textDecoration: 'line-through',
-                        fontSize: isMobile ? '8px' : '16px'
+                    <Typography color={product.discount ? "text.secondary" : ""} sx={{
+                        textDecoration: product.discount ? 'line-through' : 'none',
+                        fontSize: isMobile ? '8px' : '12px'
                     }}>
-                        1.500.000 đ
+                        {convertPrice(product.product.price)}
                     </Typography>
-                    <Typography sx={{
-                        fontSize: isMobile ? '8px' : '16px'
+                    {product.discountedPrice && <Typography sx={{
+                        fontSize: isMobile ? '8px' : '12px',
+                        color: red[400],
+                        fontWeight: 'bold',
                     }}>
-                        1.000.000 đ
-                    </Typography>
+                        {convertPrice(product.product.price - product.discountedPrice)}
+                    </Typography>}
+                </Box>
+                <Box sx={{
+                    mt: 1,
+                }}>
+                    {product.product.avgRating ?
+                        <Box sx={{
+                            display: 'flex',
+                            gap: '5px',
+                            alignItems: 'center',
+                        }}>
+                            <Rating size="small" name="read-only" value={product.product.avgRating} precision={0.5} readOnly /> 
+                            <Typography sx={{ color: 'grey', fontSize: isMobile ? '8px' : '12px' }}>{`(${product.product.numberOfRating})`}</Typography>
+                        </Box>:
+                        <Typography sx={{ color: 'grey', fontSize: isMobile ? '8px' : '12px' }}>Chưa có đánh giá</Typography>}
+                    {product.product.buyQuantity ?
+                        <Typography sx={{ color: 'grey', fontSize: isMobile ? '8px' : '12px' }}>{'Đã bán ' + product.product.buyQuantity}</Typography>
+                        : <Typography sx={{ color: 'grey', fontSize: isMobile ? '8px' : '12px' }}>{'Đã bán 0'}</Typography>}
                 </Box>
             </CardContent>
-            <CardActions sx={{
-                mt: 0,
-                pt: 0
-            }}>
-                <Button size="small" color="primary" sx={{
-                    fontSize: isMobile? '8px' : '16px'
-                }}>
-                    Thêm vào giỏ hàng
-                </Button>
-            </CardActions>
         </Card>
-    );
+    )
 }
+
 export default ProductCard;

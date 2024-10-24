@@ -1,13 +1,11 @@
 import { Box, Button, TextField } from "@mui/material";
-import { CartItemModel } from "../../../model/cart-item.model";
-import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
-import { useEffect } from "react";
+import RemoveIcon from '@mui/icons-material/Remove';
 import { updateItemCart } from "../../../utils/cart-handle";
-import { updateCartState } from "../../../redux/reducers/cart-reducer";
 import { useDispatch } from "react-redux";
-
-
+import { updateCartState } from "../../../redux/reducers/cart-reducer";
+import { useEffect } from "react";
+import { CartItemModel } from "../../../model/cart-item.model";
 
 type Props = {
     quantity: number,
@@ -15,14 +13,17 @@ type Props = {
     maxValue: number,
     cartItem?: CartItemModel
 }
+
 const QuantityProduct = ({ quantity, setQuantity, maxValue, cartItem }: Props) => {
     const distpatch = useDispatch();
+
     const increasement = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.stopPropagation();
         if (maxValue > quantity) {
             setQuantity(quantity + 1);
         }
     }
+
     const decreasement = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.stopPropagation();
         if (quantity > 1) {
@@ -37,16 +38,63 @@ const QuantityProduct = ({ quantity, setQuantity, maxValue, cartItem }: Props) =
             distpatch(updateCartState());
         }
     }, [quantity])
+
+    const changeInput = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setQuantity(Number(e.target.value) > maxValue ? maxValue : Number(e.target.value));
+    }
+
+    const blurInput = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        if (Number(e.target.value) < 1) {
+            setQuantity(1);
+        }
+    }
+
+
     return (
-        <Box>
-            <Button onClick={(e) => decreasement(e)}>
-                <RemoveIcon />
+        <Box sx={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            fontSize: '0.875rem', 
+        }}>
+            <Button 
+                variant="outlined"
+                onClick={(e) => decreasement(e)} 
+                size="small" 
+                sx={{ p: 0.5 }} // Giảm padding để làm nút nhỏ hơn
+            >
+                <RemoveIcon fontSize="small" />
             </Button>
-            <TextField variant="outlined" type="number" value={quantity} onChange={(e) => setQuantity(Number(e.target.value))} />
-            <Button onClick={(e) => increasement(e)} >
-                <AddIcon />
+            <TextField
+                sx={{
+                    width: '60px', // Giảm kích thước TextField
+                    '& .MuiInputBase-input': {
+                        textAlign: 'center',
+                        fontSize: '0.875rem', // Giảm kích thước font
+                    }
+                }}
+                InputProps={{
+                    sx: {
+                        padding: '0px', // Loại bỏ padding bên trong
+                        height: '32px', // Giảm chiều cao TextField
+                    }
+                }}
+                variant="outlined"
+                type="number"
+                value={quantity}
+                onChange={(e) => changeInput(e)}
+                onBlur={(e) => blurInput(e)}
+            />
+            <Button 
+                variant="outlined"
+                onClick={(e) => increasement(e)} 
+                size="small" 
+                sx={{ p: 0.5 }} // Giảm padding để làm nút nhỏ hơn
+            >
+                <AddIcon fontSize="small" />
             </Button>
         </Box>
-    );
+    )
 }
+
 export default QuantityProduct;

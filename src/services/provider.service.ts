@@ -43,16 +43,16 @@ export const updateProviderApi = async (id:number =-1,providerDto: ProviderDto) 
         return Promise.reject(error);
     }
 }
-export const deleteProviderApi = async (id:number=-1) : Promise<ResponseSuccess<ProviderModel>> =>{
-    try {
-        const response = await requestConfig(
-            'providers',
-            Method.DELETE,    
-            [],
-            ContentType.JSON
-        );
-        return response.data;
-    } catch (error) {
-        return Promise.reject(error);
-    }
-}
+// export const deleteProviderApi = async (id:number=-1) : Promise<ResponseSuccess<ProviderModel>> =>{
+//     try {
+//         const response = await requestConfig(
+//             'providers',
+//             Method.DELETE,    
+//             [],
+//             ContentType.JSON
+//         );
+//         return response.data;
+//     } catch (error) {
+//         return Promise.reject(error);
+//     }
+// }

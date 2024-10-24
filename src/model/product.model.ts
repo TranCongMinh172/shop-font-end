@@ -4,15 +4,16 @@ import { ProviderModel } from "./privoder.model";
 
 export type ProductModel = {
     id?: number;
-    productName?: string;
-    productPrice?: number;
+    productName: string;
+    price: number;
     category?: CategoryModel;
     avgRating?: number;
     numberOfRating?: number;
     provider?: ProviderModel;
-    productDescription?: string;
+    description?: string;
     thumbnail?: string;
     productStatus?: Status;
     totalQuantity?: number;
+    buyQuantity?: number; 
 
 }

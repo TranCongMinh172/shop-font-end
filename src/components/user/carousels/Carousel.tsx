@@ -1,13 +1,18 @@
-import { IconButton, useMediaQuery } from "@mui/material";
-import { Box } from "@mui/system";
-import { ReactNode, useEffect, useState } from "react";
-import styled from "styled-components";
-import carousel1 from "../../../assets/carousels/carousel1.png";
+import { Box, IconButton, useMediaQuery } from "@mui/material";
+import carousel1 from "../../../assets/carousels/carousel1.jpg";
 import carousel2 from "../../../assets/carousels/carousel2.jpg";
 import carousel3 from "../../../assets/carousels/carousel3.jpg";
+import styled from "styled-components";
+import { ReactNode, useEffect, useState } from "react";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
+
+const images = [
+    carousel1,
+    carousel2,
+    carousel3
+]
 const CarouselBackground = styled(Box)({
     backgroundRepeat: "no-repeat",
     backgroundSize: "cover",
@@ -27,17 +32,15 @@ const CarouselBackground = styled(Box)({
         zIndex: -1,
     }
 });
-const images = [
-    carousel1,
-    carousel2,
-    carousel3
-]
+
 type Props = {
     children?: ReactNode;
 }
+
 const Carousel = ({ children }: Props) => {
     const [viewIndex, setViewIndex] = useState<number>(0);
     const isMobile: boolean = useMediaQuery('(max-width:600px)');
+
     useEffect(() => {
         const timeoutId = setInterval(() => {
             setViewIndex(prev => (prev === images.length - 1 ? 0 : prev + 1));
@@ -47,6 +50,7 @@ const Carousel = ({ children }: Props) => {
             clearInterval(timeoutId);
         };
     }, [viewIndex]);
+
     return (
         <CarouselBackground sx={{
             backgroundImage: `url(${images[viewIndex]})`,
@@ -65,7 +69,18 @@ const Carousel = ({ children }: Props) => {
                 }
             }} onClick={() => setViewIndex(prev => (prev === 0 ? images.length - 1 : prev - 1))}
             ><ArrowBackIosNewIcon /></IconButton>
-            {children}
+            <Box sx={{
+                display: "flex",
+                justifyContent: "flex-end",
+                alignItems: "center",
+                gap: "8px",
+                width: "100%",
+                height: "100%",
+                pb: 5,
+                flexDirection: "column",
+            }}>
+                {children}
+            </Box>
             <IconButton sx={{
                 position: "absolute",
                 top: "40%",
@@ -81,6 +96,7 @@ const Carousel = ({ children }: Props) => {
             }} onClick={() => setViewIndex(prev => (prev === images.length - 1 ? 0 : prev + 1))}
             ><ArrowForwardIosIcon /></IconButton>
         </CarouselBackground>
-    );
+    )
 }
+
 export default Carousel;

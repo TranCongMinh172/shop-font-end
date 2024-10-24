@@ -11,8 +11,8 @@ function LoginSuccess() {
     const navigate  = useNavigate();
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
-    const accessToken = queryParams.get("accessToken");
-    const refreshToken = queryParams.get("refreshToken");
+    // const accessToken = queryParams.get("accessToken");
+    // const refreshToken = queryParams.get("refreshToken");
     const email = queryParams.get("email");
     const historyPath = localStorage.getItem("historyPath");
 
@@ -24,14 +24,17 @@ function LoginSuccess() {
             if(accessToken && refreshToken && email){
                 const loginResponse : LoginResponse ={
                     accessToken: accessToken,
-                    fereshToken: refreshToken
+                    refreshToken: refreshToken
                 }
                 try {
                     saveToken(loginResponse);
                     const res: ResponseSuccess<UserModel> = await getUserByEmail(email);
+                    console.log(res);
                     const user : UserModel = res.data;
+                    console.log(user);
                     saveUserToLocalStorage(user); 
                 } catch (error) {
+                    console.log(error);
                     navigate("/auth/login");
                 }
                 navigate(historyPath || "/");

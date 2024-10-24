@@ -42,13 +42,14 @@ export const updatePatchProductDetails = async (id:number=-1 ,productDetailDto: 
         return Promise.reject(error);
     }
 }
-export const deleteProductDetails = async (id:number=-1): Promise<ResponseSuccess<ProductDetailModel>> => {
+export const removeProductDetail = async (id: number): Promise<ResponseSuccess<string>> => {
     try {
         const response = await requestConfig(
-            'productDetails',
+            `product-details/${id}`,
             Method.DELETE,
             [],
-            ContentType.JSON
+            ContentType.JSON,
+            true
         );
         return response.data;
     } catch (error) {

@@ -1,6 +1,5 @@
 import { Container, Box, } from '@mui/material';
-import { AnimatePresence, motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 
 type Props = {
     children?: React.ReactNode;

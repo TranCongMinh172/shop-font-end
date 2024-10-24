@@ -1,31 +1,34 @@
-import { Card, CardActions, CardContent, CardMedia, Fab, Typography, useMediaQuery } from "@mui/material"
+import { Card, CardActions, CardContent, CardMedia, Fab, Typography, useMediaQuery } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-
+import { convertPrice } from "../../../utils/convert-price";
 
 type Props = {
     productId: number,
     productName: string,
     productPrice: number,
     fNavigate: (id: number) => void;
+    thumbnail: string;
 
 }
-const ProductCard = ({ productId, productName, productPrice, fNavigate }: Props) => {
+
+const ProductCard = ({ productId, productName, productPrice, fNavigate, thumbnail }: Props) => {
     const isMobile = useMediaQuery('(max-width:600px)');
     return (
         <Card sx={{ maxWidth: 345 }}>
+
             <CardMedia
                 component="img"
-                height={isMobile ? '150px' : '200px'}
-                image="https://static.vecteezy.com/system/resources/thumbnails/013/078/569/small/illustration-of-cute-colored-cat-cartoon-cat-image-in-format-suitable-for-children-s-book-design-elements-introduction-of-cats-to-children-books-or-posters-about-animal-free-png.png"
+                height={isMobile ? '150px': '200px'}
+                image={thumbnail}
                 alt="green iguana"
             />
             <CardContent>
-                <Typography gutterBottom component="div" sx={{ fontSize: '18px' }}>
+                <Typography gutterBottom component="div" sx={{fontSize: '18px'}}>
                     {productName}
                 </Typography>
                 <Typography color="text.secondary">
-                    {productPrice}
+                    {convertPrice(productPrice)}
                 </Typography>
             </CardContent>
             <CardActions sx={{
@@ -45,6 +48,7 @@ const ProductCard = ({ productId, productName, productPrice, fNavigate }: Props)
                 </Fab>
             </CardActions>
         </Card>
-    );
+    )
 }
+
 export default ProductCard;

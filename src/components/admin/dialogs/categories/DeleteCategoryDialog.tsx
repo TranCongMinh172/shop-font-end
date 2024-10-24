@@ -13,7 +13,7 @@ type Props = {
 const DeleteCategoryDialog = ({open, handleClose, deleteCategory, category, showAlert} : Props) => {
     const handleDelete = async () => {
         try {
-            const response = await deleteCategoryApi(category.id);
+            await deleteCategoryApi(category.id);
             deleteCategory(category);
             showAlert('success', 'Xóa thành công');
             handleClose();

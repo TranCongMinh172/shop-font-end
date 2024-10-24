@@ -1,9 +1,18 @@
-import {
-    experimental_extendTheme as extendTheme,
-} from '@mui/material/styles';
-import {green, grey, pink} from "@mui/material/colors";
+import { createTheme, experimental_extendTheme as extendTheme } from '@mui/material/styles';
+import { green, pink } from '@mui/material/colors';
+
+const breakpoints = {
+    values: {
+        xs: 0,
+        sm: 600,
+        md: 960,
+        lg: 1280,
+        xl: 1920,
+    },
+};
 
 export const theme = extendTheme({
+    breakpoints: breakpoints,
     colorSchemes: {
         light: {
             palette: {
@@ -11,7 +20,7 @@ export const theme = extendTheme({
                     main: pink[600],
                 },
                 secondary: {
-                    main: '#f0f0f0'
+                    main: '#f0f0f0',
                 },
             },
         },
@@ -25,11 +34,26 @@ export const theme = extendTheme({
                 },
                 success: {
                     main: green[600],
-                }
+                },
             },
         },
     },
 });
+
+export const darkTheme = createTheme({
+    palette: {
+        mode: 'dark',
+        primary: {
+            main: pink[400],
+        },
+        secondary: {
+            main: pink[300],
+        },
+        success: {
+            main: green[600],
+        },
+    }
+})
 
 export const primaryGradient = 'linear-gradient(to right, #CB7FFF 40%, #A15BFF 100%)';
 export const pinkGradient = 'linear-gradient(to right, #FFA296 0%, #FE8596 50%, #FE7096 100%)';

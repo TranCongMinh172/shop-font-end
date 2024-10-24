@@ -31,3 +31,11 @@ export const updateItemCart = (item: CartItemModel) => {
         localStorage.setItem('cart', JSON.stringify(cart));
     }
 }
+export const removeItemCart = (item: CartItemModel) => {
+    const cart = getCartLocalStorage();
+    const index = cart.findIndex((c) => c.productDetail.id === item.productDetail.id);
+    if(index !== -1) {
+        cart.splice(index, 1);
+        localStorage.setItem('cart', JSON.stringify(cart));
+    }
+}

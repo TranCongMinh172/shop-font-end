@@ -9,6 +9,7 @@ export enum Role {
     ROLE_ADMIN = "ROLE_ADMIN",
 }
 export type UserModel ={
+    id: number;
     name: string;
     email: string;
     phoneNumber?: string;
@@ -16,8 +17,8 @@ export type UserModel ={
     dateOfBirth?: Date;
     role: Role;
     address?: AddressModel;
-    // facebookAccountId?: string;
-    // googleAccountId?: string;
+    facebookAccountId?: string;
+    googleAccountId?: string;
     avatarUrl?: string;
     createdAt: Date;
     updatedAt: Date;

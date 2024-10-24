@@ -1,38 +1,82 @@
-import { AppBar, Badge, Box, Drawer, ListItemButton, Tooltip, Typography, useMediaQuery } from "@mui/material";
-import { useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { AppBar, Avatar, Badge, Box, Drawer, ListItemButton, Menu, MenuItem, Tooltip, Typography, useMediaQuery } from "@mui/material";
 import IconButtonGradient from "../../components/common/IconButtonGradient";
-import MenuIcon from '@mui/icons-material/Menu';
-import { ExpandLess, ExpandMore, Notifications } from "@mui/icons-material";
-import { primaryGradient } from "../../theme";
-import { userMenu } from "../common/Menu";
-import SearchInput from "../../components/admin/search-input/SearchInput";
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { ExpandLess, ExpandMore, Notifications } from "@mui/icons-material";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { primaryGradient } from "../../theme";
+import MenuIcon from '@mui/icons-material/Menu';
 import NavBar from "../common/NavBar";
+import { useState } from "react";
+import { userMenu } from "../common/Menu";
 import { useSelector } from "react-redux";
+import { getUserFromLocalStorage, isLogin } from "../../services/user.service";
+import ButtonGradient from "../../components/common/ButtonGradient";
+import { getToken } from "../../services/token.service";
+import { lougout, removeLocalStorage } from "../../services/auth.service";
+import NotificationView from "../../components/common/NotificationView";
+import { UserModel } from "../../model/user.model";
 import { RootState } from "../../redux/store/Store";
-
+import { LoginResponse } from "../../dto/responses/login-response";
+import SearchInput from "../../components/admin/search-input/SearchInput";
 
 
 
 const Header = () => {
     const location = useLocation();
-    const listCart = useSelector((state: RootState)=> state.cart.items);
     const isMobile: boolean = useMediaQuery('(max-width:600px)');
     const isMedium: boolean = useMediaQuery('(max-width:1150px)');
-    const [openChildItem, setOpenChildItem] = useState<{ [key: string]: boolean }>({});
+    const login: boolean = isLogin();
+    console.log(login);
+    const user: UserModel | null = getUserFromLocalStorage();
     const [open, setOpen] = useState(false);
+    const [openChildItem, setOpenChildItem] = useState<{ [key: string]: boolean }>({});
+    const cart = useSelector((state: RootState) => state.cart.items);
+    const notifications = useSelector((state: RootState) => state.notification.items);
     const navigate = useNavigate();
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const [anchorE2, setAnchorE2] = useState<null | HTMLElement>(null);
+    const openMenu = Boolean(anchorEl);
+    const openE2 = Boolean(anchorE2);
     const toggleDrawer = (newOpen: boolean) => () => {
         setOpen(newOpen);
     };
     const handleClick = (title: string) => {
         setOpenChildItem(prev => ({ ...prev, [title]: !prev[title] }));
     };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+    const handleClose2 = () => {
+        setAnchorE2(null);
+    };
+    const handleClickAvatar = (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClickNotify = (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchorE2(event.currentTarget);
+    };
+
     const DrawerList = (
         <NavBar items={userMenu}></NavBar>
     );
+
+    const handleLogout = async () => {
+        const token: LoginResponse | null = getToken();
+        if (token) {
+            try {
+                await lougout(token.accessToken);
+                removeLocalStorage();
+                navigate("/");
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    }
+
+    const handleSearch = (name: string) => {
+        window.location.href = `/products?pageNo=1&search=productName:${name}`;
+    }
+
     return (
         <AppBar elevation={0} color="secondary" sx={{
             display: 'flex',
@@ -55,7 +99,6 @@ const Header = () => {
                         {DrawerList}
                     </Drawer>
                 </Box> : <></>}
-                <img src="anh logo" alt={"logo"} width={"55px"} height={"55px"} />
             </Box>
             {!isMobile && !isMedium ? <Box sx={{
                 display: 'flex',
@@ -86,7 +129,7 @@ const Header = () => {
                 })}
             </Box> : <></>}
             {!isMobile && <Box sx={{ flex: 1 }}>
-                <SearchInput placeholder="search text here" />
+                <SearchInput placeHolder="Tìm kiếm sản phẩm" handleSearch={handleSearch}/>
             </Box>}
             <Box sx={{
                 display: 'flex',
@@ -94,26 +137,63 @@ const Header = () => {
             }}>
                 <Tooltip title="giỏ hàng">
                     <IconButtonGradient onClick={() => navigate('/cart')}>
-                        <Badge badgeContent={listCart.length} color="primary">
+                        <Badge badgeContent={cart.length} color="primary">
                             <ShoppingCartIcon fontSize="small" />
                         </Badge>
                     </IconButtonGradient>
                 </Tooltip>
                 <Tooltip title="thông báo">
-                    <IconButtonGradient>
-                        <Badge badgeContent={4} color="primary">
+                    <IconButtonGradient onClick={handleClickNotify}>
+                        <Badge badgeContent={notifications.length} color="primary">
                             <Notifications fontSize="small" />
                         </Badge>
                     </IconButtonGradient>
                 </Tooltip>
-                <Tooltip title="tài khoản">
-                    <IconButtonGradient>
-                        <AccountCircleIcon />
+                <Menu
+                    id="basic-menu"
+                    anchorEl={anchorE2}
+                    open={openE2}
+                    onClose={handleClose2}
+                    MenuListProps={{
+                        'aria-labelledby': 'basic-button',
+                    }}
+                >
+                    {notifications.map((notification) =>
+                        <NotificationView key={notification.id} notification={notification}/>)}
+                </Menu>
+                {login ? <><Tooltip title={user ? user.name : "tài khoản"}>
+                    <IconButtonGradient onClick={handleClickAvatar}>
+                        <Avatar alt={user?.name} src={user?.avatarUrl} sx={{
+                            width: 23,
+                            height: 23,
+                        }} />
+                        <></>
                     </IconButtonGradient>
                 </Tooltip>
+                    <Menu
+                        id="basic-menu"
+                        anchorEl={anchorEl}
+                        open={openMenu}
+                        onClose={handleClose}
+                        MenuListProps={{
+                            'aria-labelledby': 'basic-button',
+                        }}
+                    >
+                        <MenuItem onClick={() => navigate('/profile')}>Thông tin cá nhân</MenuItem>
+                        <MenuItem onClick={() => navigate('/orders')}>Đơn hàng của tôi</MenuItem>
+                        <MenuItem onClick={handleLogout}>Đăng xuất</MenuItem>
+                    </Menu>
+                </> :
+                    <ButtonGradient variant="contained"
+                        onClick={() => {
+                            localStorage.setItem("historyPath", location.pathname);
+                            navigate('/auth/login', { state: { from: location.pathname } });
+                        }}
+                        size="small"
+                    >Đăng nhập</ButtonGradient>}
             </Box>
         </AppBar>
-    );
-
+    )
 }
+
 export default Header;

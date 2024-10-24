@@ -13,7 +13,6 @@ import { pinkGradient, primaryGradient } from "../../theme.tsx";
 import { ReactNode, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { blue } from "@mui/material/colors";
-import logoIcon from "../../assets/logo/logo-icon.png";
 
 type Item = {
     title: string,

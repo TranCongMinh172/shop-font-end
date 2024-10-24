@@ -1,7 +1,7 @@
 import { TextField } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
-const CustomTextField = styled(TextField)(({ theme }) => ({
+const CustomTextField = styled(TextField)(() => ({
     '& .MuiInputLabel-root': {
         color: 'gray', // Màu chữ của label
     },

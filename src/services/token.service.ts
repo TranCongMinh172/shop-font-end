@@ -1,13 +1,18 @@
 import { LoginResponse } from "../dto/responses/login-response";
+import { decrypt, encrypt } from "../utils/crypt-data";
 
-export const saveToken = (loginResponse: LoginResponse) =>{
-    localStorage.setItem('token', JSON.stringify(loginResponse));
+export const saveToken = (loginResponse: LoginResponse) => {
+    const encryptToken: string = encrypt(JSON.stringify(loginResponse))
+    localStorage.setItem('token', encryptToken);
 }
 
-export const getToken=() =>{
+export const getToken = (): LoginResponse | null => {
     const token = localStorage.getItem('token');
-    if(token){
-        return JSON.parse(token)
+    if (token) {
+        const decryptToken: string = decrypt(token);
+        if(decryptToken !== "") {
+            return JSON.parse(decryptToken);
+        }
     }
     return null;
 }
