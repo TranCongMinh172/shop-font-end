@@ -1,11 +1,14 @@
 import { Box } from "@mui/material";
 import Header from "./Header";
 import Footer from "./Footer";
+import MessageBox from "../../pages/user/chat/MessageBox";
+import { isLogin } from "../../services/user.service";
 
 type Props = {
     children?: React.ReactNode;
 }
 const UserLayout = ({ children }: Props) => {
+    const login: boolean = isLogin();
     return (
         <Box sx={{ display: "flex", flexDirection: "column", minHeight: '100vh' }}>
             <Header></Header>
@@ -13,7 +16,8 @@ const UserLayout = ({ children }: Props) => {
                 {children}
             </Box>
             <Box sx={{ height: '60px' }}>
-                <Footer></Footer>
+            {login &&  <MessageBox/>}
+            <Box sx={{ height: '60px' }}><Footer></Footer></Box>
             </Box>
         </Box>
     );

@@ -6,7 +6,6 @@ import {
     ListItemButton,
     ListItemIcon,
     ListItemText,
-    useMediaQuery,
 } from "@mui/material";
 import {ExpandLess, ExpandMore } from "@mui/icons-material";
 import { pinkGradient, primaryGradient } from "../../theme.tsx";
@@ -28,7 +27,6 @@ type Props = {
 const NavBar = ({items} : Props) => {
     const [open, setOpen] = useState<{ [key: string]: boolean }>({});
     const location = useLocation();
-    const isMobile: boolean = useMediaQuery('(max-width:1150px)');
 
 
     const handleClick = (title: string) => {
@@ -44,7 +42,7 @@ const NavBar = ({items} : Props) => {
             height: '100vh',
             width: '220px',
         }}>
-            {isMobile && <img src="logo" alt={"logo"} width={"55px"} height={"55px"} />}
+       
             <List
                 sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
                 {buttonIcon.map((itemIcon: Item, index: number) => {

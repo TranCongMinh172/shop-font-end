@@ -22,7 +22,7 @@ const MessageView = ({visible, close} : Props) => {
                 borderRadius: '15px',
                 boxShadow: '0px 8px 16px rgba(0, 0, 0, 0.2)',
                 padding: '10px',
-                opacity: 0,
+                opacity: visible?1:0,
                 transform: 'scale(0.8)',
                 animation: visible ? 'fadeIn 0.3s ease-out forwards' : 'fadeOut 0.3s ease-in forwards',
                 display: 'flex',

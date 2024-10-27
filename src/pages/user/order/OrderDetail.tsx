@@ -50,6 +50,7 @@ const OrderDetail = () => {
             (async () => {
                 try {
                     const response = await getOrderDetailsByOrderId(id);
+                    console.log(response.data)
                     setOrderDetails(response.data);
                     const response2 = await getOrderById(id);
                     setOrder(response2.data);

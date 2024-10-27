@@ -27,7 +27,7 @@ const VerifyEmail = () => {
 
     const formikLogin = useFormik({
         initialValues: {
-            email: state?.email ||'',
+            email: state?.email || '',
             otp: '',
         },
         validationSchema: validationLoginSchema,
@@ -61,7 +61,7 @@ const VerifyEmail = () => {
             <Box sx={{ mb: 2 }}>
                 <CustomTextField
                     sx={{
-                       display:'none'
+                        display: 'none'
                     }}
                     fullWidth
                     label="Email"
@@ -70,8 +70,13 @@ const VerifyEmail = () => {
                     onChange={formikLogin.handleChange}
                     onBlur={formikLogin.handleBlur}
                     error={formikLogin.touched.email && Boolean(formikLogin.errors.email)}
-                    helperText={formikLogin.touched.email && formikLogin.errors.email}
+                    helperText={
+                        (formikLogin.touched.email && typeof formikLogin.errors.email === 'string'
+                            ? formikLogin.errors.email
+                            : '') || ''
+                    }
                 />
+
                 <CustomTextField
                     sx={{
                         flex: 1,

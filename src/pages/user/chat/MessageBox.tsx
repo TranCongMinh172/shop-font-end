@@ -6,7 +6,7 @@ import MessageView from "./MessageView";
 
 const MessageBox = () => {
     const [visible, setVisible] = useState(false);
-
+    console.log(visible)
     const close = () => {
         setVisible(false);
     }

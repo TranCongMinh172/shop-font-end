@@ -1,4 +1,4 @@
-import {Box, Button, Typography} from "@mui/material";
+import {Typography} from "@mui/material";
 import { GradientBox } from "../../gradient/GradientColor";
 
 const Footer = () => {

@@ -26,7 +26,6 @@ const Header = () => {
     const isMobile: boolean = useMediaQuery('(max-width:600px)');
     const isMedium: boolean = useMediaQuery('(max-width:1150px)');
     const login: boolean = isLogin();
-    console.log(login);
     const user: UserModel | null = getUserFromLocalStorage();
     const [open, setOpen] = useState(false);
     const [openChildItem, setOpenChildItem] = useState<{ [key: string]: boolean }>({});

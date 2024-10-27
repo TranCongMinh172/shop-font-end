@@ -82,6 +82,7 @@ const userRoutes = [
         path: '/payment',
         element: <Payment/>
     },
+
 ]
 
 const publicRoutes = [

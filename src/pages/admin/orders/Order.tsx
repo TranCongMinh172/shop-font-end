@@ -93,6 +93,7 @@ const Order = () => {
 
 
     const handleClick =  async (orderId: string) => {
+        console.log(orderId);
         try {
             await updateStatusOrder(orderId, {
                 status: OrderStatus.SHIPPED

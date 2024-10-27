@@ -78,6 +78,7 @@ export const updateUser = async (email: string, userUpdateDto: UserUpdateDto): P
     }
 }
 export const changePassword = async (changePasswordRequest: ChangePasswordRequest): Promise<ResponseSuccess<LoginResponse>> => {
+    console.log(changePasswordRequest)
     try {
         const response = await requestConfig(
             `users/change-password`,

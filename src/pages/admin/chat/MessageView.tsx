@@ -1,11 +1,11 @@
 import { Box, Typography } from "@mui/material";
-import { RoomModel } from "../../../models/room.model";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../../redux/store/store";
 import { useState } from "react";
 import { primaryGradient } from "../../../theme";
 import MessageContent from "./MessageContent";
 import { setCurrentRoom } from "../../../redux/reducers/room-reducer";
+import { RootState } from "../../../redux/store/Store";
+import { RoomModel } from "../../../model/room.model";
 
 export const MessageView = () => {
     const rooms: RoomModel[] = useSelector((state: RootState) => state.rooms.items);

@@ -9,7 +9,6 @@ import {
 import Drawer from '@mui/material/Drawer';
 import MenuIcon from '@mui/icons-material/Menu';
 import IconButtonGradient from "../../components/common/IconButtonGradient.tsx";
-import logoIcon from "../../assets/logo/logo-icon.png";
 import { useState } from "react";
 import NavBar from "../common/NavBar.tsx";
 import Tooltip from '@mui/material/Tooltip';
